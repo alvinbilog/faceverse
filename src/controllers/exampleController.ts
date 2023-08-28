@@ -3,6 +3,7 @@ import exampleServices from '../services/exampleServices';
 import { CreateExampleType, ExampleInterface } from '../models/Example.model';
 import { RequiredField } from '../utils';
 import { exampleValidator } from '../utils/validators';
+import { constants } from 'buffer';
 
 const exampleRouter = Router();
 
@@ -24,31 +25,46 @@ async function create(req: Request, res: Response, next: NextFunction) {
     next(e);
   }
 }
-function getAll(_req: Request, res: Response, next: NextFunction) {
+async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(200).json({ success: true });
+    const { interests, select } = req.query as {
+      interests?: string;
+      select?: string;
+    };
+    const exampleData = await exampleServices.getAll(interests, select);
+    res.status(200).json({ success: true, data: exampleData });
   } catch (e: any) {
     next(e);
   }
 }
 
-function getById(_req: Request, res: Response, next: NextFunction) {
+async function getById(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(200).json({ success: true });
+    const { id } = req.params;
+    const { select } = req.query as { select: string };
+
+    const example = await exampleServices.getById(id, select);
+    res.status(200).json({ success: true, data: example });
   } catch (e: any) {
     next(e);
   }
 }
-function update(_req: Request, res: Response, next: NextFunction) {
+async function update(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(200).json({ success: true });
+    const { id } = req.params;
+    const requestBody = req.body as ExampleInterface;
+    const updatedExample = await exampleServices.update(id, requestBody);
+    res.status(200).json({ success: true, data: updatedExample });
   } catch (e: any) {
     next(e);
   }
 }
-function del(_req: Request, res: Response, next: NextFunction) {
+async function del(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(200).json({ success: true });
+    const { id } = req.params;
+    console.log(id);
+    const deletedExample = await exampleServices.del(id);
+    res.status(200).json({ success: true, data: deletedExample });
   } catch (e: any) {
     next(e);
   }

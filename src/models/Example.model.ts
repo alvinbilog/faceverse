@@ -7,7 +7,7 @@ export interface ExampleInterface {
   name: string;
   email: string;
   avatar?: string;
-  interest?: Types.Array<string> | string[];
+  interests?: Types.Array<string> | string[];
 }
 export type CreateExampleType = RequiredField<
   ExampleInterface,
@@ -16,9 +16,9 @@ export type CreateExampleType = RequiredField<
 // Schema
 const ExampleSchema = new Schema<ExampleInterface>({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   avatar: String,
-  interest: [{ type: String }],
+  interests: [{ type: String }],
 });
 
 const ExampleModel = mongoose.model('Example', ExampleSchema);
