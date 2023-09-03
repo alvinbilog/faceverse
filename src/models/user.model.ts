@@ -19,6 +19,7 @@ export interface UserInterface {
 
 // Schema
 const UserSchema = new Schema<UserInterface>({
+
   firstName: { type: String, required: [true, 'Please provide a first name'] },
   lastName: { type: String, required: [true, 'Please provide a last name'] },
   email: {
