@@ -18,3 +18,20 @@ export const exampleValidator = {
   createExampleValidator,
   updateExampleValidator,
 };
+
+export const signupValidator = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export const loginValidator = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export const authValidator = {
+  signupValidator,
+  loginValidator,
+};

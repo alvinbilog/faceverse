@@ -1,7 +1,7 @@
 import ExampleModel, {
   CreateExampleType,
   ExampleInterface,
-} from '../models/Example.model';
+} from '../models/example.model';
 import { RequiredField } from '../utils';
 
 const exampleServices = { create, getAll, getById, update, del };

@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import exampleServices from '../services/exampleServices';
-import { CreateExampleType, ExampleInterface } from '../models/Example.model';
+import { CreateExampleType, ExampleInterface } from '../models/example.model';
 import { RequiredField } from '../utils';
 import { exampleValidator } from '../utils/validators';
 import { constants } from 'buffer';
