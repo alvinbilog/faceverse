@@ -19,10 +19,18 @@ export interface UserInterface {
 
 // Schema
 const UserSchema = new Schema<UserInterface>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, select: false },
+  firstName: { type: String, required: [true, 'Please provide a first name'] },
+  lastName: { type: String, required: [true, 'Please provide a last name'] },
+  email: {
+    type: String,
+    required: [true, 'Please provide a email'],
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide a password'],
+    select: false,
+  },
   profilePicture: { type: String, default: 'default-profile.jpg' },
   bio: String,
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],

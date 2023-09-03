@@ -4,3 +4,8 @@ export type SignupFields = {
   email: string;
   password: string;
 };
+
+export type SigninFields = {
+  email: string;
+  password: string;
+};
