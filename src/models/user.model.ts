@@ -22,7 +22,7 @@ const UserSchema = new Schema<UserInterface>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   profilePicture: { type: String, default: 'default-profile.jpg' },
   bio: String,
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
