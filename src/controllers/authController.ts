@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { SignupFields } from '../types';
+import { SigninFields, SignupFields } from '../types';
 import { authValidator } from '../utils/validators';
 import authService from '../services/authServices';
 
@@ -12,17 +12,32 @@ authRouter.route('/signout').post(signout);
 export default authRouter;
 async function signup(req: Request, res: Response, next: NextFunction) {
   try {
-    const requestBody = req.body as SignupFields;
-    const signupData = authValidator.signupValidator.parse(requestBody);
-    await authService.signup(signupData);
-    res.status(200).json({ success: true, data: signupData });
+    const { firstName, lastName, email, password } = req.body as SignupFields;
+    const signupData = authValidator.signupValidator.parse({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    await authService.signup({ firstName, lastName, email, password });
+    res.status(201).json({
+      success: true,
+      data: signupData,
+      message: 'User created successfully',
+    });
   } catch (e: any) {
     next(e);
   }
 }
-function signin(_req: Request, res: Response, next: NextFunction) {
+async function signin(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(200).json({ success: true });
+    const { email, password } = req.body as SigninFields;
+    const token = await authService.signin({ email, password });
+    res.cookie('token', token, {
+      maxAge: 3600000,
+      httpOnly: true,
+    });
+    res.status(200).json({ success: true, message: 'Successfully Login' });
   } catch (e: any) {
     next(e);
   }
