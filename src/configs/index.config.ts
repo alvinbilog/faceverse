@@ -1,9 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
-const JWT_SECRET_TOKEN = process.env.JWT_SECRET_TOKEN as string;
-
+const ACCESS_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT as string;
 
-const configVars = { JWT_SECRET_TOKEN, SERVER_ENDPOINT };
+const configVars = {
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  SERVER_ENDPOINT,
+};
 
 export default configVars;

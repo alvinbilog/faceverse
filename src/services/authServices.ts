@@ -24,30 +24,38 @@ async function signup({ firstName, lastName, email, password }: SignupFields) {
 }
 async function signin({ email, password }: SigninFields) {
   const user = await UserModel.findOne({ email });
-
-  if (!user) {
-    throw new CustomError('User not found', 400);
-  } else {
-    await bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        throw new CustomError('Wrong password', 400);
-      } else if (isMatch) {
-        // Passwords match, create token data
-        const tokenData = {
-          id: user._id,
-          email: user.email,
-        };
-        // create token
-        const token = jwt.sign(tokenData, configVars.JWT_SECRET_TOKEN, {
-          expiresIn: '1h',
-        });
-        return token;
-      } else {
-        throw new CustomError(
-          'Password does not math, authentication failed',
-          400
-        );
-      }
-    });
+  if (!email || !password) {
+    throw new CustomError('User not found or Password not found', 400);
   }
+  if (!user) {
+    throw new CustomError('Unauthorized', 401);
+  }
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) throw new CustomError('Unauthorized', 401);
+
+  // password match?; create token data
+  const tokenData = {
+    id: user._id,
+    email: user.email,
+  };
+
+  //access token
+  const accessToken = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+    },
+    configVars.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: '1h',
+    }
+  );
+  // create refresh token
+  const refreshToken = jwt.sign(
+    { email: user.email },
+    configVars.REFRESH_TOKEN_SECRET,
+    { expiresIn: '30d' }
+  );
+  return { accessToken };
 }

@@ -33,7 +33,7 @@ const UserSchema = new Schema<UserInterface>({
   password: {
     type: String,
     required: [true, 'Please provide a password'],
-    select: false,
+    // select: false, *it causes error in comparing entered password to hashed
   },
   profilePicture: { type: String, default: 'default-profile.jpg' },
   bio: String,
