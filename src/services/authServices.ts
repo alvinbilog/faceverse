@@ -25,20 +25,14 @@ async function signup({ firstName, lastName, email, password }: SignupFields) {
 async function signin({ email, password }: SigninFields) {
   const user = await UserModel.findOne({ email });
   if (!email || !password) {
-    throw new CustomError('User not found or Password not found', 400);
+    throw new CustomError('User and Password are required', 400);
   }
   if (!user) {
-    throw new CustomError('Unauthorized', 401);
+    throw new CustomError('The email is not valid', 401);
   }
   const match = await bcrypt.compare(password, user.password);
 
-  if (!match) throw new CustomError('Unauthorized', 401);
-
-  // password match?; create token data
-  const tokenData = {
-    id: user._id,
-    email: user.email,
-  };
+  if (!match) throw new CustomError('Incorrect email or password', 401);
 
   //access token
   const accessToken = jwt.sign(
@@ -51,11 +45,6 @@ async function signin({ email, password }: SigninFields) {
       expiresIn: '1h',
     }
   );
-  // create refresh token
-  const refreshToken = jwt.sign(
-    { email: user.email },
-    configVars.REFRESH_TOKEN_SECRET,
-    { expiresIn: '30d' }
-  );
+
   return { accessToken };
 }

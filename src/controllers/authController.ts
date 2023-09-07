@@ -3,7 +3,7 @@ import { SigninFields, SignupFields } from '../types';
 import { authValidator } from '../utils/validators';
 import authService from '../services/authServices';
 import configVars from '../configs/index.config';
-import jwt, { VerifyErrors } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import UserModel from '../models/user.model';
 
 const authRouter = Router();
@@ -40,44 +40,53 @@ async function signin(req: Request, res: Response, next: NextFunction) {
 
     // set accessToken as cookie
     res.cookie('accessToken', tokens.accessToken, {
-      maxAge: 3600000, // Adjust expiration time as needed
+      maxAge: 3600000, // 1 hour
       httpOnly: true,
     });
-    //refresh
 
     res.status(200).json({ success: true, message: 'Successfully Login' });
   } catch (e: any) {
     next(e);
   }
 }
-function refresh(req: Request, res: Response) {
-  const cookies = req.cookies;
+async function refresh(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies?.jwt;
 
-  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' });
-  const refreshToken = cookies.jwt;
-
-  // verification
-  jwt.verify(
-    refreshToken,
-    configVars.REFRESH_TOKEN_SECRET,
-    async (err: VerifyErrors | null, decoded: any) => {
-      if (err) return res.status(403).json({ message: 'Forbidden' });
-      const foundUser = await UserModel.findOne({ email: decoded.email });
-
-      if (!foundUser) return res.status(401).json({ message: 'Unauthorized' });
-      {
-        const accessToken = jwt.sign(
-          {
-            email: foundUser.email,
-          },
-          configVars.ACCESS_TOKEN_SECRET,
-          { expiresIn: '1D' }
-        );
-        res.json({ accessToken });
-      }
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
-  );
+
+    // Verify the refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      configVars.REFRESH_TOKEN_SECRET
+    ) as JwtPayload;
+
+    // Find the user based on the decoded email
+    const foundUser = await UserModel.findOne({ email: decoded.email });
+
+    if (!foundUser) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Generate a new access token
+    const accessToken = jwt.sign(
+      {
+        id: foundUser._id,
+        email: foundUser.email,
+      },
+      configVars.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1D' }
+    );
+
+    res.json({ accessToken });
+  } catch (err) {
+    // Handle any errors that occur during token verification or user lookup
+    res.status(403).json({ message: 'Forbidden' });
+  }
 }
+
 function signout(_req: Request, res: Response, next: NextFunction) {
   try {
     res.status(200).json({ success: true });
