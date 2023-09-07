@@ -87,10 +87,13 @@ async function refresh(req: Request, res: Response) {
   }
 }
 
-function signout(_req: Request, res: Response, next: NextFunction) {
-  try {
-    res.status(200).json({ success: true });
-  } catch (e: any) {
-    next(e);
-  }
+function signout(req: Request, res: Response) {
+  const cookies = req.cookies?.jwt;
+  if (!cookies) res.status(204); // no content
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.status(200).json({ success: true });
 }
