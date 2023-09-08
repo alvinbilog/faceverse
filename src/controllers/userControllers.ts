@@ -1,9 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const userRouter = Router();
 
 userRouter.route('/').get(example);
-userRouter.route('/example-user/:id').get(getUserExample);
+userRouter.route('/example-user/:id').get(authMiddleware, getUserExample);
 
 export default userRouter;
 function example(_req: Request, res: Response) {

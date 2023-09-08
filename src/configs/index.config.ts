@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-const ACCESS_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT as string;
 

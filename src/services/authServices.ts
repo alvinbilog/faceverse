@@ -22,20 +22,21 @@ async function signup({ firstName, lastName, email, password }: SignupFields) {
   });
   return null;
 }
-async function signin({ email, password }: SigninFields) {
-  const user = await UserModel.findOne({ email });
-  if (!email || !password) {
+async function signin(signinData: SigninFields) {
+  // identify if user exist
+  const user = await UserModel.findOne({ email: signinData.email });
+  if (!signinData.email || !signinData.password) {
     throw new CustomError('User and Password are required', 400);
   }
   if (!user) {
     throw new CustomError('The email is not valid', 401);
   }
-  const match = await bcrypt.compare(password, user.password);
+  const match = await bcrypt.compare(signinData.password, user.password);
 
   if (!match) throw new CustomError('Incorrect email or password', 401);
 
   //access token
-  const accessToken = jwt.sign(
+  const accessToken: string = jwt.sign(
     {
       id: user._id,
       email: user.email,
@@ -45,6 +46,17 @@ async function signin({ email, password }: SigninFields) {
       expiresIn: '1h',
     }
   );
+  //refresh token
+  const refreshToken: string = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+    },
+    configVars.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: '30d',
+    }
+  );
 
-  return { accessToken };
+  return { accessToken, refreshToken };
 }

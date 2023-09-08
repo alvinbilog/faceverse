@@ -28,12 +28,12 @@ export const signupValidator = z
   })
   .strict();
 
-export const loginValidator = z.object({
+export const signinValidator = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
 export const authValidator = {
   signupValidator,
-  loginValidator,
+  signinValidator,
 };
