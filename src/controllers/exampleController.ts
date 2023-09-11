@@ -1,15 +1,14 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import exampleServices from '../services/exampleServices';
 import { CreateExampleType, ExampleInterface } from '../models/example.model';
-import { RequiredField } from '../utils';
 import { exampleValidator } from '../utils/validators';
-import { constants } from 'buffer';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const exampleRouter = Router();
 
 exampleRouter.route('/create').post(create);
 exampleRouter.route('/get-all').get(getAll);
-exampleRouter.route('/get/:id').get(getById);
+exampleRouter.route('/get/:id').get(authMiddleware, getById);
 exampleRouter.route('/update/:id').put(update);
 exampleRouter.route('/delete/:id').delete(del);
 

@@ -19,19 +19,21 @@ export const exampleValidator = {
   updateExampleValidator,
 };
 
-export const signupValidator = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-});
+export const signupValidator = z
+  .object({
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string().email(),
+    password: z.string(),
+  })
+  .strict();
 
-export const loginValidator = z.object({
+export const signinValidator = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
 export const authValidator = {
   signupValidator,
-  loginValidator,
+  signinValidator,
 };

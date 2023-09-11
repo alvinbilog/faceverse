@@ -15,11 +15,14 @@ export interface UserInterface {
   createdAt: Date;
   updatedAt: Date;
   accountType: string;
+  forgotPasswordToken: string;
+  forgotPasswordTokenExpiry: string;
+  verifyToken: string;
+  verifyTokenExpiry: Date;
 }
 
 // Schema
 const UserSchema = new Schema<UserInterface>({
-
   firstName: { type: String, required: [true, 'Please provide a first name'] },
   lastName: { type: String, required: [true, 'Please provide a last name'] },
   email: {
@@ -30,7 +33,7 @@ const UserSchema = new Schema<UserInterface>({
   password: {
     type: String,
     required: [true, 'Please provide a password'],
-    select: false,
+    // select: false, *it causes error in comparing entered password to hashed
   },
   profilePicture: { type: String, default: 'default-profile.jpg' },
   bio: String,
@@ -40,6 +43,10 @@ const UserSchema = new Schema<UserInterface>({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   accountType: { type: String, required: true, default: 'user' },
+  forgotPasswordToken: String,
+  forgotPasswordTokenExpiry: String,
+  verifyToken: String,
+  verifyTokenExpiry: Date,
 });
 
 const UserModel = mongoose.model('User', UserSchema);
