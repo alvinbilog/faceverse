@@ -10,3 +10,7 @@ export type SigninFields = {
   password: string;
 };
 
+export type PostFields = {
+  author: string[];
+  content: string;
+};

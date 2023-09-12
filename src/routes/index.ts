@@ -4,13 +4,14 @@ import healthRouter from './health';
 import exampleRouter from '../controllers/exampleController';
 import authRouter from '../controllers/authController';
 import authMiddleware from '../middlewares/authMiddleware';
-
+import postRouter from '../controllers/postController';
 const router = Router();
 
 router.use('/user', userRouter);
 router.use('/health', healthRouter);
 router.use('/example', exampleRouter);
 router.use('/auth', authRouter);
+router.use('/post', authMiddleware, postRouter);
 
 // Apply the authMiddleware to protect the route
 router.get('/protected-route', authMiddleware, (req, res) => {

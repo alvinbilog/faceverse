@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { SigninFields, SignupFields } from '../types';
 import { authValidator } from '../utils/validators';
-import authService from '../services/authServices';
+import authServices from '../services/authServices';
 import configVars from '../configs/index.config';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import UserModel from '../models/user.model';
@@ -23,7 +23,7 @@ async function signup(req: Request, res: Response, next: NextFunction) {
       email,
       password,
     });
-    await authService.signup({ firstName, lastName, email, password });
+    await authServices.signup({ firstName, lastName, email, password });
     res.status(201).json({
       success: true,
       data: signupData,
@@ -37,7 +37,7 @@ async function signin(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body as SigninFields;
     const signinData = authValidator.signinValidator.parse({ email, password });
-    const { accessToken, refreshToken } = await authService.signin(signinData);
+    const { accessToken, refreshToken } = await authServices.signin(signinData);
 
     // Set accessToken and refreshToken as separate cookies
     res.cookie('accessToken', accessToken, {

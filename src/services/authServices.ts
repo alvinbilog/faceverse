@@ -5,9 +5,9 @@ import CustomError from '../errors/customError';
 import jwt from 'jsonwebtoken';
 import configVars from '../configs/index.config';
 
-const authService = { signup, signin };
+const authServices = { signup, signin };
 
-export default authService;
+export default authServices;
 
 const saltRounds = 10;
 
@@ -43,7 +43,7 @@ async function signin(signinData: SigninFields) {
     },
     configVars.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '1h',
+      expiresIn: '30h',
     }
   );
   //refresh token

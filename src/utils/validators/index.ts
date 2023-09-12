@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// Example
 const createExampleValidator = z.object({
   name: z.string(),
   email: z.string().email(),
@@ -19,6 +20,7 @@ export const exampleValidator = {
   updateExampleValidator,
 };
 
+// Signup and Signin
 export const signupValidator = z
   .object({
     firstName: z.string(),
@@ -36,4 +38,18 @@ export const signinValidator = z.object({
 export const authValidator = {
   signupValidator,
   signinValidator,
+};
+
+// Post
+export const createPostValidator = z.object({
+  author: z.array(z.string()),
+  content: z.string(),
+  image: z.string().optional(),
+  likes: z.array(z.string()).optional(),
+  comments: z.array(z.string()).optional(),
+  hashtag: z.array(z.string()).optional(),
+});
+
+export const postValidator = {
+  createPostValidator,
 };
