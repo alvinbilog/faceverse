@@ -9,7 +9,6 @@ export type SigninFields = {
   email: string;
   password: string;
 };
-
 export type PostFields = {
   author: string[];
   content: string;

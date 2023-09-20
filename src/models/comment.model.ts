@@ -1,20 +1,24 @@
 import mongoose, { Schema, Types } from 'mongoose';
-
+import { RequiredField } from '../utils';
 export interface CommentInterface {
   _id: Types.ObjectId;
-  author: Types.ObjectId;
-  post: Types.ObjectId;
-  content: String;
-  replies?: Types.ObjectId[];
+  author: Types.ObjectId | string;
+  post: (Types.ObjectId | string)[];
+  content?: string;
+  replies?: (Types.ObjectId | string)[];
   createdAt: Date;
   updatedAt: Date;
 }
+export type CreateComment = RequiredField<
+  CommentInterface,
+  'author' | 'post' | 'content'
+>;
 
 const CommentSchema = new Schema<CommentInterface>({
-  author: [{ types: Schema.Types.ObjectId, ref: 'User' }],
-  post: [{ types: Schema.Types.ObjectId, ref: 'Post' }],
+  author: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  post: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   content: String,
-  replies: [{ types: Schema.Types.ObjectId, ref: 'Reply' }],
+  replies: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

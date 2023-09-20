@@ -50,10 +50,6 @@ async function signin(req: Request, res: Response, next: NextFunction) {
       httpOnly: true,
     });
 
-    console.log('access token');
-    console.log(accessToken);
-    console.log('refresh token');
-    console.log(refreshToken);
     res.status(200).json({
       success: true,
       data: { accessToken, refreshToken },

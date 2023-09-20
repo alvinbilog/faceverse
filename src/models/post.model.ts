@@ -1,16 +1,19 @@
 import mongoose, { Schema, Types } from 'mongoose';
+import { RequiredField } from '../utils';
 
 export interface PostInterface {
   _id: Types.ObjectId;
-  author: Types.ObjectId; // User Reference (assuming ObjectId)
+  author: Types.ObjectId | string; // User Reference
   content: String;
   image?: String;
-  likes?: Types.ObjectId[];
-  comments?: Types.ObjectId[];
+  likes?: (Types.ObjectId | string)[];
+  comments?: (Types.ObjectId | string)[];
   hashtags?: Array<string> | string[];
   createdAt: Date;
   updatedAt: Date;
 }
+export type CreatePostType = RequiredField<PostInterface, 'author' | 'content'>;
+
 const PostSchema = new Schema<PostInterface>({
   author: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   content: String,

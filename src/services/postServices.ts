@@ -1,15 +1,18 @@
-import ExampleModel, {
-  CreateExampleType,
-  ExampleInterface,
-} from '../models/example.model';
-import PostModel, { PostInterface } from '../models/post.model';
+import { Types } from 'mongoose';
+import PostModel, { CreatePostType, PostInterface } from '../models/post.model';
 import { PostFields } from '../types';
-
-const postServices = { create, getPosts, getPost, updatePost, deletePostById };
+const postServices = {
+  create,
+  getPosts,
+  getPost,
+  updatePost,
+  appendCommentToPost,
+  deletePostById,
+};
 
 export default postServices;
 
-async function create(postData: PostFields) {
+async function create(postData: CreatePostType) {
   const createdPost = await PostModel.create({ ...postData });
   return createdPost;
 }
@@ -43,6 +46,19 @@ async function updatePost(id: string, requestBody: PostInterface) {
   });
   return updatedPost;
 }
+async function appendCommentToPost(
+  author: string[],
+  post: string[],
+  content: string[],
+  replies: string[]
+) {
+  return PostModel.findByIdAndUpdate(
+    author,
+    { $push: { post: post } },
+    { new: true }
+  );
+}
+
 async function deletePostById(id: string) {
   const deletedPost = await PostModel.deleteOne({ _id: id });
   return deletedPost;

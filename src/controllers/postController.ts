@@ -1,21 +1,21 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import postServices from '../services/postServices';
 import { postValidator } from '../utils/validators';
+import { CreatePostType, PostInterface } from '../models/post.model';
 import { PostFields } from '../types';
-import { PostInterface } from '../models/post.model';
 
 const postRouter = Router();
 
-postRouter.route('/').post(create);
+postRouter.route('/').post(createPost);
 postRouter.route('/').get(getPosts);
 postRouter.route('/:id').get(getPost);
 postRouter.route('/update/:id').put(updatePost);
 postRouter.route('/delete/:id').delete(deletePost);
 
 export default postRouter;
-async function create(req: Request, res: Response, next: NextFunction) {
+async function createPost(req: Request, res: Response, next: NextFunction) {
   try {
-    const requestBody = req.body as PostFields;
+    const requestBody = req.body as CreatePostType;
     const postData = postValidator.createPostValidator.parse(requestBody);
     const createdPost = await postServices.create(postData);
     res.status(200).json({ success: true, data: createdPost });
@@ -62,7 +62,6 @@ async function deletePost(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
     const deletedPost = await postServices.deletePostById(id); // Call the service function
-    console.log(deletedPost);
     res.status(200).json({ success: true, data: deletedPost });
   } catch (e: any) {
     next(e);
