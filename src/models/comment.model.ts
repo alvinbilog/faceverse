@@ -2,7 +2,7 @@ import mongoose, { Schema, Types } from 'mongoose';
 import { RequiredField } from '../utils';
 export interface CommentInterface {
   _id: Types.ObjectId;
-  author: Types.ObjectId | string;
+  author: (Types.ObjectId | string)[];
   post: (Types.ObjectId | string)[];
   content?: string;
   replies?: (Types.ObjectId | string)[];

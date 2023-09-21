@@ -1,12 +1,13 @@
 import { Types } from 'mongoose';
 import PostModel, { CreatePostType, PostInterface } from '../models/post.model';
-import { PostFields } from '../types';
+
 const postServices = {
   create,
   getPosts,
   getPost,
   updatePost,
   appendCommentToPost,
+  likeToPost,
   deletePostById,
 };
 
@@ -47,16 +48,30 @@ async function updatePost(id: string, requestBody: PostInterface) {
   return updatedPost;
 }
 async function appendCommentToPost(
-  author: string[],
-  post: string[],
-  content: string[],
-  replies: string[]
+  postId: (Types.ObjectId | string)[],
+  commentId: Types.ObjectId | string
 ) {
   return PostModel.findByIdAndUpdate(
-    author,
-    { $push: { post: post } },
+    postId,
+    { $push: { comments: commentId } },
     { new: true }
   );
+}
+async function likeToPost(id: string) {
+  const post = await PostModel.findByIdAndUpdate(
+    id,
+    { $push: { likes: id } },
+    { new: true }
+  );
+
+  if (!post) {
+    throw new Error('Post not found');
+  }
+  if (post.likes?.includes(id)) {
+    throw new Error('You already liked this post');
+  }
+
+  return post.likes?.push(id);
 }
 
 async function deletePostById(id: string) {

@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { CreateComment } from '../models/comment.model';
 import CommentModel from '../models/comment.model';
+import postServices from './postServices';
 const commentServices = {
   create,
   getComments,
@@ -14,6 +15,7 @@ export default commentServices;
 async function create(commentData: CreateComment) {
   const createComment = await CommentModel.create({ ...commentData });
 
+  await postServices.appendCommentToPost(commentData?.post, createComment._id);
   return createComment;
 
   // await PostModel.appendCommentToPost(commentData.post, createComment._id);

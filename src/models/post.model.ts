@@ -3,7 +3,7 @@ import { RequiredField } from '../utils';
 
 export interface PostInterface {
   _id: Types.ObjectId;
-  author: Types.ObjectId | string; // User Reference
+  author: (Types.ObjectId | string)[]; // User Reference
   content: String;
   image?: String;
   likes?: (Types.ObjectId | string)[];

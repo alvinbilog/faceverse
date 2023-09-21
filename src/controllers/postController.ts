@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import postServices from '../services/postServices';
 import { postValidator } from '../utils/validators';
-import { CreatePostType, PostInterface } from '../models/post.model';
+import PostModel, { CreatePostType, PostInterface } from '../models/post.model';
 import { PostFields } from '../types';
 
 const postRouter = Router();
@@ -11,6 +11,7 @@ postRouter.route('/').get(getPosts);
 postRouter.route('/:id').get(getPost);
 postRouter.route('/update/:id').put(updatePost);
 postRouter.route('/delete/:id').delete(deletePost);
+postRouter.route('/like/:id').post(likePost);
 
 export default postRouter;
 async function createPost(req: Request, res: Response, next: NextFunction) {
@@ -43,7 +44,7 @@ async function getPost(req: Request, res: Response, next: NextFunction) {
       populate?: string;
     };
     const posts = await postServices.getPost(id, select, populate);
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, data: posts });
   } catch (e: any) {
     next(e);
   }
@@ -63,6 +64,17 @@ async function deletePost(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const deletedPost = await postServices.deletePostById(id); // Call the service function
     res.status(200).json({ success: true, data: deletedPost });
+  } catch (e: any) {
+    next(e);
+  }
+}
+async function likePost(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params;
+
+    const post = await postServices.likeToPost(id);
+
+    res.status(200).json({ success: true, data: post });
   } catch (e: any) {
     next(e);
   }
