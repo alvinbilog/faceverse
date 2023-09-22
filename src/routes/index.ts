@@ -6,6 +6,7 @@ import authRouter from '../controllers/authController';
 import authMiddleware from '../middlewares/authMiddleware';
 import postRouter from '../controllers/postController';
 import commentRouter from '../controllers/commentController';
+import notificationRouter from '../controllers/notificationController';
 const router = Router();
 
 router.use('/user', userRouter);
@@ -14,7 +15,7 @@ router.use('/example', exampleRouter);
 router.use('/auth', authRouter);
 router.use('/post', authMiddleware, postRouter);
 router.use('/comment', authMiddleware, commentRouter);
-
+router.use('/notification', authMiddleware, notificationRouter);
 // Apply the authMiddleware to protect the route
 router.get('/protected-route', authMiddleware, (req, res) => {
   // This route is protected and requires authentication
