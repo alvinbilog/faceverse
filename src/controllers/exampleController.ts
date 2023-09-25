@@ -8,7 +8,7 @@ const exampleRouter = Router();
 
 exampleRouter.route('/create').post(create);
 exampleRouter.route('/get-all').get(getAll);
-exampleRouter.route('/get/:id').get(authMiddleware, getById);
+exampleRouter.route('/get/:id').get(getById);
 exampleRouter.route('/update/:id').put(update);
 exampleRouter.route('/delete/:id').delete(del);
 

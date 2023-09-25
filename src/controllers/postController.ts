@@ -3,11 +3,12 @@ import postServices from '../services/postServices';
 import { postValidator } from '../utils/validators';
 import PostModel, { CreatePostType, PostInterface } from '../models/post.model';
 import { PostFields } from '../types';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const postRouter = Router();
 
 postRouter.route('/').post(createPost);
-postRouter.route('/').get(getPosts);
+postRouter.route('/all').get(getPosts);
 postRouter.route('/:id').get(getPost);
 postRouter.route('/update/:id').put(updatePost);
 postRouter.route('/delete/:id').delete(deletePost);
