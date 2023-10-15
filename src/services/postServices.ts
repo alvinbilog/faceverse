@@ -20,9 +20,18 @@ async function create(postData: CreatePostType) {
 
 async function getPosts(select?: string | undefined, populate?: string) {
   if (populate) {
+    // return PostModel.find()
+    //   .select(select || '')
+    //   .populate(populate)
+    //   .exec();
+
+    //nested population
     return PostModel.find()
-      .select(select || '')
-      .populate(populate)
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: { path: 'author' },
+      })
       .exec();
   }
   return PostModel.find()
