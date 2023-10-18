@@ -18,6 +18,7 @@ export default postRouter;
 async function createPost(req: Request, res: Response, next: NextFunction) {
   try {
     const requestBody = req.body as CreatePostType;
+    console.log('requestBody', requestBody);
     const postData = postValidator.createPostValidator.parse(requestBody);
     const createdPost = await postServices.create(postData);
     res.status(200).json({ success: true, data: createdPost });
