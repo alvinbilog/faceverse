@@ -38,7 +38,6 @@ async function signin(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body as SigninFields;
     const signinData = authValidator.signinValidator.parse({ email, password });
     const { accessToken, refreshToken } = await authServices.signin(signinData);
-
     // Set accessToken and refreshToken as separate cookies
     res.cookie('accessToken', accessToken, {
       maxAge: 3600000, // 1 hour
@@ -50,10 +49,6 @@ async function signin(req: Request, res: Response, next: NextFunction) {
       httpOnly: true,
     });
 
-    console.log('access token');
-    console.log(accessToken);
-    console.log('refresh token');
-    console.log(refreshToken);
     res.status(200).json({
       success: true,
       data: { accessToken, refreshToken },
@@ -111,7 +106,9 @@ function signout(req: Request, res: Response) {
   const cookies = req.cookies;
 
   if (!cookies || !cookies.accessToken || !cookies.refreshToken) {
-    return res.status(204).json({ success: true }); // no content
+    return res
+      .status(204)
+      .json({ success: true, message: 'Logout Successfully' }); // no content
   }
 
   // Clear both accessToken and refreshToken cookies
@@ -127,5 +124,5 @@ function signout(req: Request, res: Response) {
     secure: true,
   });
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, message: 'Logout Successfully' });
 }
