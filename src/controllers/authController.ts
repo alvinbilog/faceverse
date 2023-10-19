@@ -34,8 +34,6 @@ async function signup(req: Request, res: Response, next: NextFunction) {
   }
 }
 async function signin(req: Request, res: Response, next: NextFunction) {
-  console.log('HEre');
-  console.log('requestBody', req.body);
   try {
     const { email, password } = req.body as SigninFields;
     const signinData = authValidator.signinValidator.parse({ email, password });
