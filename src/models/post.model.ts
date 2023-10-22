@@ -3,7 +3,7 @@ import { RequiredField } from '../utils';
 
 export interface PostInterface {
   _id: Types.ObjectId;
-  author: (Types.ObjectId | string)[]; // User Reference
+  author: Types.ObjectId | string; // User Reference
   content: String;
   image?: String;
   likes?: (Types.ObjectId | string)[];
@@ -15,7 +15,7 @@ export interface PostInterface {
 export type CreatePostType = RequiredField<PostInterface, 'author' | 'content'>;
 
 const PostSchema = new Schema<PostInterface>({
-  author: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
   content: String,
   image: String,
   likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],

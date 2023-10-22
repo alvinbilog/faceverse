@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 import { GridFsStorage } from 'multer-gridfs-storage';
 import Grid from 'gridfs-stream';
 import multer from 'multer';
-import meRouter from './controllers/meController';
 
 dotenv.config();
 
@@ -21,9 +20,12 @@ const port = process.env.PORT || 8000;
 // body parser
 app.use(express.json());
 
-app.use('/api', meRouter); // Prefix all routes with /api
-
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 app.use(cookieParser()); // Use cookie-parser middleware
 

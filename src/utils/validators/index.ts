@@ -42,7 +42,7 @@ export const authValidator = {
 
 // Post
 export const createPostValidator = z.object({
-  author: z.array(z.string()),
+  author: z.string(),
   content: z.string(),
   image: z.string().optional(),
   likes: z.array(z.string()).optional(),
