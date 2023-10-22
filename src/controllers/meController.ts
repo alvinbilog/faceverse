@@ -4,7 +4,7 @@ import UserModel from '../models/user.model';
 
 const meRouter = Router();
 
-meRouter.route('/user').get(getUserDetails);
+meRouter.route('/').get(getUserDetails);
 
 async function getUserDetails(req: Request, res: Response) {
   try {

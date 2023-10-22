@@ -10,7 +10,7 @@ import notificationRouter from '../controllers/notificationController';
 import meRouter from '../controllers/meController';
 const router = Router();
 
-router.use('/user', userRouter);
+router.use('/user', authMiddleware, userRouter);
 router.use('/health', healthRouter);
 router.use('/example', exampleRouter);
 router.use('/auth', authRouter);
