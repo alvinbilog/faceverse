@@ -1,6 +1,6 @@
 import UserModel, { UserInterface } from '../models/user.model';
 
-const userServices = { getUsers, getUser, updateUser, delUser };
+const userServices = { getUsers, getUser, getUserPost, updateUser, delUser };
 
 export default userServices;
 
@@ -29,6 +29,17 @@ async function getUser(id: string, select?: string, populate?: string) {
   }
   return UserModel.findById(id)
     .select(select || '')
+    .exec();
+}
+async function getUserPost(id: string, select?: string, populate?: string) {
+  let additionalPopulation = '';
+  if (populate && populate.includes('posts')) {
+    additionalPopulation = 'posts';
+  }
+
+  return UserModel.findById(id)
+    .select(select || '')
+    .populate(additionalPopulation)
     .exec();
 }
 async function updateUser(id: string, requestBody: UserInterface) {

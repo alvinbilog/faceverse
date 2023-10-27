@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import PostModel, { CreatePostType, PostInterface } from '../models/post.model';
+import UserModel from '../models/user.model';
 
 const postServices = {
   create,
@@ -7,6 +8,7 @@ const postServices = {
   getPost,
   updatePost,
   appendCommentToPost,
+  appendPostToUser,
   likeToPost,
   deletePostById,
 };
@@ -15,6 +17,7 @@ export default postServices;
 
 async function create(postData: CreatePostType) {
   const createdPost = await PostModel.create({ ...postData });
+  await postServices.appendPostToUser(postData?.author, createdPost._id);
   return createdPost;
 }
 
@@ -66,6 +69,18 @@ async function appendCommentToPost(
     { new: true }
   );
 }
+
+async function appendPostToUser(
+  userId: Types.ObjectId | string,
+  postId: Types.ObjectId | string
+) {
+  return UserModel.findByIdAndUpdate(
+    userId,
+    { $push: { posts: postId } },
+    { new: true }
+  );
+}
+
 async function likeToPost(id: string) {
   const post = await PostModel.findByIdAndUpdate(
     id,
