@@ -1,3 +1,4 @@
+import CommentModel from '../models/comment.model';
 import UserModel, { UserInterface } from '../models/user.model';
 
 const userServices = { getUsers, getUser, getUserPost, updateUser, delUser };
@@ -32,9 +33,19 @@ async function getUser(id: string, select?: string, populate?: string) {
     .exec();
 }
 async function getUserPost(id: string, select?: string, populate?: string) {
-  let additionalPopulation = '';
+  let additionalPopulation: any[] = [];
   if (populate && populate.includes('posts')) {
-    additionalPopulation = 'posts';
+    additionalPopulation.push({
+      path: 'posts',
+      populate: {
+        path: 'comments',
+        model: CommentModel,
+        populate: {
+          path: 'author',
+          model: UserModel,
+        },
+      },
+    });
   }
 
   return UserModel.findById(id)
