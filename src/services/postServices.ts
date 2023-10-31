@@ -100,5 +100,8 @@ async function likeToPost(id: string) {
 
 async function deletePostById(id: string) {
   const deletedPost = await PostModel.deleteOne({ _id: id });
+
+  // Remove the post's reference from the posts array in UserModel
+  await UserModel.updateMany({ posts: id }, { $pull: { posts: id } });
   return deletedPost;
 }
