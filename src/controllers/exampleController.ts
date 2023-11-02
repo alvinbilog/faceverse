@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import exampleServices from '../services/exampleServices';
-import { CreateExampleType, ExampleInterface } from '../models/example.model';
+
 import { exampleValidator } from '../utils/validators';
 import authMiddleware from '../middlewares/authMiddleware';
+import { CreateExampleType, ExampleInterface } from '../models/example.model';
 
 const exampleRouter = Router();
 
