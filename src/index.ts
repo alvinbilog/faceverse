@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: 'https://faceverses.xyz/',
+    origin: 'https://faceverses.xyz',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   })
