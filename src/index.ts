@@ -20,7 +20,11 @@ const port = process.env.PORT || 8000;
 // body parser
 app.use(express.json());
 
-const allowedOrigins = ['https://faceverses.xyz', 'http://localhost:3000'];
+const allowedOrigins = [
+  'https://faceverses.xyz',
+  'http://localhost:3000',
+  'https://faceverse.vercel.app',
+];
 
 app.use(
   cors({
